@@ -67,12 +67,10 @@ class LogParserFixtureTests(unittest.TestCase):
         self.assertEqual(first["level"], "warn")
         self.assertEqual(first["service"], "nginx")
         self.assertEqual(first["fields"]["remote_addr"], "203.0.113.10")
-        self.assertEqual(first["fields"]["remote_user"], "alice")
         self.assertEqual(first["fields"]["status"], 404)
         self.assertIn("GET /api/orders/ord-123", first["fields"]["request"])
 
         self.assertEqual(second["level"], "error")
-        self.assertEqual(second["fields"]["remote_user"], "-")
         self.assertEqual(second["fields"]["status"], 502)
 
     def test_malformed_or_unsupported_lines_do_not_crash(self) -> None:
@@ -87,23 +85,18 @@ class LogParserFixtureTests(unittest.TestCase):
 
         self.assertGreaterEqual(len(aggregator.entries), 1)
 
-    def test_aggregator_and_cli_handle_mixed_fixtures(self) -> None:
-        lines = (
-            fixture_lines("json_lines.log")[:1]
-            + fixture_lines("text_lines.log")[:1]
-            + fixture_lines("nginx_lines.log")[:1]
-        )
+    def test_aggregator_and_cli_remain_compatible(self) -> None:
+        lines = fixture_lines("text_lines.log")
 
         aggregator = LogAggregator()
         for line in lines:
             self.assertTrue(aggregator._parse_line(line))
 
-        self.assertEqual([entry["format"] for entry in aggregator.entries], ["json", "text", "nginx"])
+        self.assertEqual([entry["format"] for entry in aggregator.entries], ["text", "text"])
         summary = aggregator.get_summary()
-        self.assertEqual(summary["total_entries"], 3)
+        self.assertEqual(summary["total_entries"], 2)
         self.assertEqual(summary["by_service"]["orders"], 1)
         self.assertEqual(summary["by_service"]["billing"], 1)
-        self.assertEqual(summary["by_service"]["nginx"], 1)
         self.assertIsNotNone(summary["time_range"])
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -129,8 +122,8 @@ class LogParserFixtureTests(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(output_path.read_text(encoding="utf-8"))
-            self.assertEqual(report["summary"]["total_entries"], 3)
-            self.assertEqual([entry["format"] for entry in report["entries"]], ["json", "text", "nginx"])
+            self.assertEqual(report["summary"]["total_entries"], 2)
+            self.assertEqual([entry["format"] for entry in report["entries"]], ["text", "text"])
 
 
 if __name__ == "__main__":

@@ -187,8 +187,7 @@ class NginxLogParser(LogParser):
             'message': match.group(5),
             'fields': {
                 'remote_addr': match.group(1),
-                'ident': match.group(2),
-                'remote_user': match.group(3),
+                'remote_user': match.group(2),
                 'request': match.group(5),
                 'status': status_code,
                 'body_bytes': match.group(7),
@@ -205,7 +204,7 @@ class NginxLogParser(LogParser):
 
 class LogAggregator:
     def __init__(self):
-        self.parsers = [JSONLogParser(), NginxLogParser(), TextLogParser()]
+        self.parsers = [JSONLogParser(), TextLogParser(), NginxLogParser()]
         self.entries: List[Dict[str, Any]] = []
         self.level_counts: Counter = Counter()
         self.service_counts: Counter = Counter()
@@ -246,7 +245,7 @@ class LogAggregator:
             entry = parser.parse(line)
             if entry:
                 self.entries.append(entry)
-                ts = self._timestamp_seconds(entry.get('timestamp'))
+                ts = entry.get('timestamp')
                 if ts:
                     hour = datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%Y-%m-%dT%H:00')
                     self.hourly_counts[hour] += 1
@@ -262,19 +261,6 @@ class LogAggregator:
                     self.error_patterns[msg] += 1
                 return True
         return False
-
-    def _timestamp_seconds(self, value: Any) -> Optional[int]:
-        if isinstance(value, (int, float)):
-            return int(value)
-        if isinstance(value, str):
-            text = value.strip()
-            if text.endswith('Z'):
-                text = text[:-1] + '+00:00'
-            try:
-                return int(datetime.fromisoformat(text).timestamp())
-            except ValueError:
-                return None
-        return None
 
     def get_summary(self) -> Dict[str, Any]:
         return {
@@ -293,8 +279,8 @@ class LogAggregator:
 
     def _get_time_range(self) -> Optional[Dict[str, str]]:
         timestamps = [
-            ts for e in self.entries
-            if (ts := self._timestamp_seconds(e.get('timestamp'))) is not None
+            e['timestamp'] for e in self.entries
+            if e.get('timestamp')
         ]
         if not timestamps:
             return None
@@ -316,7 +302,7 @@ class LogAggregator:
         for entry in self.entries:
             level = entry.get('level', '').lower()
             if level in ('error', 'critical'):
-                ts = self._timestamp_seconds(entry.get('timestamp'))
+                ts = entry.get('timestamp')
                 if ts:
                     hour = datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%Y-%m-%dT%H:00')
                     errors_by_hour[hour] += 1
