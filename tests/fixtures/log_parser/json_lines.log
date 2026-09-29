@@ -1,0 +1,3 @@
+# Hand-written JSON log fixtures based on representative structured app logs.
+{"timestamp":"2024-01-15T12:34:56Z","level":"ERROR","service":"orders","message":"checkout failed","order_id":"ord-123","customer_id":"cust-77"}
+{"time":"2024-01-15T12:35:04+00:00","severity":"warn","app":"billing","msg":"payment retry scheduled","invoice_id":"inv-456"}

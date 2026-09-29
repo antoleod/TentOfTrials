@@ -1,0 +1,5 @@
+# Malformed or unsupported lines that must not crash parser attempts.
+{not valid json
+203.0.113.10 - - [bad-date] "GET / HTTP/1.1" 200 12 "-" "curl/8.0"
+
+<<<binary garbage>>>

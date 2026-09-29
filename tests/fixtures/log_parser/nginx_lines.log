@@ -1,0 +1,3 @@
+# Hand-written nginx combined access log fixtures.
+203.0.113.10 - alice [15/Jan/2024:12:36:02 +0000] "GET /api/orders/ord-123 HTTP/1.1" 404 532 "https://example.test/cart" "curl/8.0"
+198.51.100.22 - - [15/Jan/2024:12:37:10 +0000] "POST /api/login HTTP/1.1" 502 64 "-" "Mozilla/5.0"
