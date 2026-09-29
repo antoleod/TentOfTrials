@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-09-29T19:04:43.871389+00:00",
+  "commit": "2dda3887",
+  "diagnostic_logd": "diagnostic\\build-2dda3887.logd",
+  "chunked": false,
+  "chunk_size_bytes": null,
+  "password": "d882fbef65addafb5e31",
+  "decrypt_command": "encryptly unpack diagnostic\\build-2dda3887.logd <outdir> --password d882fbef65addafb5e31",
+  "total_modules": 2,
+  "passed": 0,
+  "failed": 2,
+  "modules": [
+    {
+      "name": "backend",
+      "status": "FAIL",
+      "elapsed_seconds": 4.047,
+      "artifact": null
+    },
+    {
+      "name": "frontend",
+      "status": "FAIL",
+      "elapsed_seconds": 0,
+      "artifact": null
+    }
+  ],
+  "pr_note": "Include this metadata and diagnostic\\build-2dda3887.logd in your PR. Maintainers may ask you to remove these diagnostic artifacts before merging."
+}
