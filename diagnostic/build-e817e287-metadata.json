@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-09-29T19:10:31.279140+00:00",
+  "commit": "e817e287",
+  "diagnostic_logd": "diagnostic\\build-e817e287.logd",
+  "chunked": false,
+  "chunk_size_bytes": null,
+  "password": "05c74e9589ff5886f41d",
+  "decrypt_command": "encryptly unpack diagnostic\\build-e817e287.logd <outdir> --password 05c74e9589ff5886f41d",
+  "total_modules": 2,
+  "passed": 0,
+  "failed": 2,
+  "modules": [
+    {
+      "name": "backend",
+      "status": "FAIL",
+      "elapsed_seconds": 4.268,
+      "artifact": null
+    },
+    {
+      "name": "frontend",
+      "status": "FAIL",
+      "elapsed_seconds": 0,
+      "artifact": null
+    }
+  ],
+  "pr_note": "Include this metadata and diagnostic\\build-e817e287.logd in your PR. Maintainers may ask you to remove these diagnostic artifacts before merging."
+}
