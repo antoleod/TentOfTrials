@@ -8,4 +8,4 @@ jobs:
     if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Disabled by owner request'
+      - run: echo 'Disabled by repository owner to prevent GitHub Actions charges'
